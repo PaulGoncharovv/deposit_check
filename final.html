@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>	
+	<head>
+		<meta charset="utf-8">
+		<style>
+			body{
+				width: 1000px;
+				margin: 0 auto;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+			div{
+				box-shadow: 0px 1px 10px gray;
+				padding: 10px;
+				margin: 0 auto;
+				border: 2px solid green;
+			}
+			h1{
+				color: green;
+				text-align: center;
+			}
+			input[type=text]:focus, input[type=number]:focus, select:focus{
+				outline: none;
+				border: 2px solid green;
+			}
+			button{
+				border: 2px solid green;
+				color: white;
+				background-color: green;
+				width: 100%;
+				height: 60px;
+				cursor: pointer;
+			}
+			button:hover{
+				border: 2px solid green;
+				color: green;
+				background-color: white;
+				width: 100%;
+				height: 60px;
+			}
+			input:invalid{
+				border: rgb(255, 0, 0) solid 3px;
+			}
+			#range{
+				width: 100%;
+			}
+
+		</style>
+		<title> Гончаров П.С. - промежуточная аттестация JS</title>
+		</head>
+	<body>
+		<div>
+			<h1>Укажите исходные данные для рассчета процентного дохода по вкладу</h1>
+			<input type="range" id="range" step="10" value="100000" min="100000" max="100000000">
+			<br>
+			<br>
+			<label>Сумма вклада (в руб.):<input type="number" id="one" pattern="[0-9]{9}" step="1000" value="100000" min="10000" max="100000000"></label>
+			<hr>
+			<label>Срок вклада (в днях) :<input type="number" id="t" pattern="[0-9]" value="365" min="30" max="3650"></label>
+			<hr>
+			<label>Процентная ставка по депозиту (%): <input type="number" id="I" pattern="[0-9]" value="10" min="1" max="50"></label>
+			<hr>
+			Укажите порядок начисления процентов : <br>
+			<input type="radio" name="dep_cap" id="12" onclick="fun2()" checked> По окончании срока
+			<input type="radio" name="dep_cap"  id="24" onchange="fun1()" > С капиталлизацией
+			<div id="111" onchange="fun1()" style="display: none">
+			<select id="cap_period">
+				<option value="Ежемесячно">Ежемесячно</option>
+				<option value="Ежеквартально">Ежеквартально</option>
+				<option value="Полугодовое начисление">Полугодовое начисление</option>
+				<option value="Ежегодно">Ежегодно</option>
+			</select>
+			</div>
+			<hr>
+			<button style="font-size: xx-large;" type="button" onclick="profitCalculation();" >Применить</button>
+			<hr>
+		</div>
+
+		<script>
+			function fun1() {
+ 	 		var chbox=document.getElementById("111");
+ 			chbox.style.display === "none" ?
+    	chbox.style.display = "block" : chbox.style.display = "block";
+			}
+ 		 	function fun2() {
+  		var chbox=document.getElementById("111");
+ 		 	chbox.style.display === "block" ?
+    	chbox.style.display = "none" : chbox.style.display = "none";
+			}
+/*--------------------------------*/
+var p = document.querySelector('#range');
+  //метод querySelector() возвращает первый элемент (Element) документа, который соответствует указанному селектору или группе селекторов. Если совпадений не найдено, возвращает значение null. Комменты для себя.
+var a = document.querySelector("#one");
+var P=100000;
+  //parseInt преобразует первый переданный ей аргумент в строковый тип, интерпретирует его и возвращает целое число или значение
+   p.onchange = function () {
+    // Атрибут событий oninput позволяет задать срабатывание скрипта, когда элемент получает ввод данных от пользователя.
+      value2 = parseInt(p.value);
+      document.querySelector('#one').value=this.value
+
+  if (p.value!=a.value) {
+    	P=a.value; 
+  }
+  else
+    {
+      P=p.value;
+     }
+  }
+  a.onchange = function () {
+    // Атрибут событий oninput позволяет задать срабатывание скрипта, когда элемент получает ввод данных от пользователя.
+      value2 = parseInt(a.value);
+      document.querySelector('#one').value=this.value;
+   if (p.value!=a.value) {
+    P=a.value; 
+  }
+  else
+    {
+      P=p.value;
+     }
+    }
+
+				function profitCalculation(){
+				let massiv=new Array();
+				P=a.value;
+				let t = document.getElementById("t").value;
+				let I = document.getElementById("I").value;
+				let K = 365;
+				let S=0.00;
+				let profit=0.00;
+				if (P<10000)				
+					{alert("Сумма вклада не соответствует условиям договора. Повторите ввод");
+					P=0;
+					return;}
+					if (P>100000000)				
+					{alert("Сумма вклада не соответствует условиям договора. Повторите ввод");
+					P=0;
+					return;}
+				if (I<0)				
+					{alert("Процентная ставка не может быть меньше нуля. Повторите ввод. Разрешенные значения 1-50%");
+					I=0;
+					return;}
+				if (I>50)				
+					{alert("Некорректная процентная ставка. Повторите ввод. Разрешенные значения 1-50%");
+					I=0;
+					return;}
+				if (I==0)				
+					{alert("Некорректная процентная ставка. Повторите ввод. Процентная ставка не может быть равной нулю");
+					I=0;
+					return;}
+				if (t<=0)				
+					{alert("Некорректный срок размещения вклада. Повторите ввод.");
+					t=0;
+					return;}
+				if (t<30)				
+					{alert("Некорректный срок размещения вклада. Повторите ввод.");
+					t=0;
+					return;}
+				if(document.getElementsByName("dep_cap")[0].checked){
+					profit = Math.floor(( P*I*t/K )/100);
+					massiv[0]=profit;
+					alert(" Процентный доход в рублях, по окончанию срока составит : " + massiv.toString());
+				}
+				else{
+					switch(document.getElementById("cap_period").value)
+				{
+					case "Ежемесячно": delta_p=30;
+						break;
+					case "Ежеквартально": delta_p=90;
+						break;
+					case "Полугодовое": delta_p=181;
+						break;
+					case "Ежегодно": delta_p=K;
+						break;
+				}
+				if(delta_p>t){
+					alert("Некорректный срок размаещения вклада. Повторите ввод.  Срок размещения вклада должен быть больше периода капитализации");
+					t=0;
+					return;}
+				let number_cap=t/delta_p;
+					for (let j=1;j<=number_cap;j++){
+						profit=Math.floor(( P*I*delta_p/K )/100);
+						massiv[j-1]=profit;
+					  P=Number(P)+profit;
+					}
+					alert(" Процентный доход в рублях по вкладу, с капиталлизацией составит : " + massiv.toString()+"  соответственно ");
+				}
+		
+		}
+    </script>
+		<div id="sm-wrapper" style="display: none;"></div>
+		<div class="mallbery-caa" style="display: none;"></div>
+		
+	</body>
+</html>
